@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/Scenes/BTS_Giant.unity
+  isLoaded: 1
+  isActive: 1
