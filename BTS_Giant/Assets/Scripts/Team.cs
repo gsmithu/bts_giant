@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Team : MonoBehaviour {
+public class Team : ScriptableObject {
 
     public string displayName { get; set; }
     public int score { get; set; }
@@ -45,23 +45,16 @@ public class Team : MonoBehaviour {
          {0,-0.1f}
     };
 
-    public Team(Transform playerPrefab, Transform parent, Color stripColour, bool atHome)
+    //initialises values and draws
+    public void init(Transform playerPrefab, Transform parent, Color stripColour, bool atHome)
     {
         this.playerPrefab = playerPrefab;
         this.parent = parent;
         this.stripColour = stripColour;
         this.atHome = atHome;
+
+        Draw();
     }
-
-    // Initialise the player positions
-    void Start () {
-
-    }
-
-    // Update is called once per frame
-    void Update () {
-		
-	}
 
     // Draws the team - not done in start as we don't have access to prefab/parent at that point
     public void Draw()
@@ -131,7 +124,7 @@ public class Team : MonoBehaviour {
                 new Journey(
                     lastEndVector,
                     newEndVector,
-                    2f
+                    5f
                 )
             );
 
