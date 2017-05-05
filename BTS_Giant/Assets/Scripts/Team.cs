@@ -12,6 +12,7 @@ public class Team : ScriptableObject {
     private List<Transform> players;
     private Transform playerPrefab;
     private bool atHome;
+    private System.Random rand;
 
     //TEMP HACK - GET THIS FROM EITHER PITCH OBJECT OR BY PASSING PARAMS IN TO MATCH
     int pitchSizeX = 60;
@@ -31,7 +32,7 @@ public class Team : ScriptableObject {
          {-0.125f,0.375f}
     };
 
-    float[,] formationEight= new float[11, 2] { //just for this example - have opposite end of pitch - but in reality, would need two arrays for each formation, both home and away ends
+    float[,] formationEight = new float[11, 2] { //just for this example - have opposite end of pitch - but in reality, would need two arrays for each formation, both home and away ends
          {0,-0.5f},
          {0.125f,-0.4f},
          {0.375f,-0.4f},
@@ -46,12 +47,14 @@ public class Team : ScriptableObject {
     };
 
     //initialises values and draws
-    public void init(Transform playerPrefab, Transform parent, Color stripColour, bool atHome)
+    public void init(Transform playerPrefab, Transform parent, Color stripColour, bool atHome, int randomSeed)
     {
         this.playerPrefab = playerPrefab;
         this.parent = parent;
         this.stripColour = stripColour;
         this.atHome = atHome;
+
+        rand = new System.Random(randomSeed);
 
         Draw();
     }
@@ -61,15 +64,13 @@ public class Team : ScriptableObject {
     {
         players = new List<Transform>();
 
-        for (int i = 1; i <= 1; i++)
+        for (int i = 1; i <= 11; i++)
         {
             var playerPosX = atHome ? i : -i;
             var playerPosZ = atHome ? i : -i;
             var playerPos = new Vector3(playerPosX, 1.3f, playerPosZ);
-            Transform player = Instantiate(playerPrefab, playerPos, Quaternion.identity);
+            Transform player = Instantiate(playerPrefab, playerPos, Quaternion.identity, parent);
             players.Add(player);
-
-            player.transform.SetParent(parent, false); //this makes the player keep its local orientation/scale rather than its global.
 
             var playerComponent = player.GetComponent<Player>();
             playerComponent.setStripColour(stripColour);
@@ -110,13 +111,13 @@ public class Team : ScriptableObject {
 
         for (int i = 0; i < numJourneys; i++)
         {
-            System.Random rand = new System.Random();
-
             int pitchLimitX = pitchSizeX / 2;
             int pitchLimitZ = pitchSizeZ / 2;
 
             float randomX = (float) rand.Next(-pitchLimitX, pitchLimitX);
             float randomZ = (float) rand.Next(-pitchLimitZ, pitchLimitZ);
+            int randomSpeedInt = rand.Next(10, 40);
+            float randomSpeed = (float)randomSpeedInt / 10;
 
             Vector3 newEndVector = new Vector3(randomX, 1.3f, randomZ);
               
@@ -124,7 +125,7 @@ public class Team : ScriptableObject {
                 new Journey(
                     lastEndVector,
                     newEndVector,
-                    5f
+                    randomSpeed
                 )
             );
 

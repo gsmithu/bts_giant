@@ -33,10 +33,10 @@ public class Match : MonoBehaviour {
         ball.transform.SetParent(this.transform, false); 
         
         homeTeam = ScriptableObject.CreateInstance("Team") as Team;
-        homeTeam.init(playerPrefab, this.transform, red, true);
+        homeTeam.init(playerPrefab, this.transform, red, true, 123456789);
 
         awayTeam = ScriptableObject.CreateInstance("Team") as Team;
-        awayTeam.init(playerPrefab, this.transform, blue, false);
+        awayTeam.init(playerPrefab, this.transform, blue, false, 987654321);
 
         SetFormations();
     }

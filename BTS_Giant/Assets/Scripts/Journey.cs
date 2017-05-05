@@ -31,8 +31,8 @@ public class Journey
         float fracJourney = distCovered / journeyLength;
         isComplete = distCovered >= journeyLength;
 
-        return Vector3.Lerp(this.startPosition, this.endPosition, fracJourney);
+        if (isComplete) return endPosition;
+
+        return Vector3.Lerp(this.startPosition, this.endPosition, fracJourney); ;
     }
-
-
 }
