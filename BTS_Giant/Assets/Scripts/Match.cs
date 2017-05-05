@@ -15,6 +15,7 @@ public class Match : MonoBehaviour {
     private Color yellow = new Color(255, 255, 0, 1);
     private Color orange = new Color(255, 90, 0, 1);
     private Color pink = new Color(255, 105, 150, 1);
+    private Color white = new Color(255, 255, 255, 1);
 
     private Team homeTeam;
     private Team awayTeam;
@@ -34,10 +35,10 @@ public class Match : MonoBehaviour {
         ball.transform.SetParent(this.transform, false); 
         
         homeTeam = ScriptableObject.CreateInstance("Team") as Team;
-        homeTeam.init(playerPrefab, this.transform, red, true, 123456789);
+        homeTeam.init(playerPrefab, this.transform, white, true, 123456789);
 
         awayTeam = ScriptableObject.CreateInstance("Team") as Team;
-        awayTeam.init(playerPrefab, this.transform, blue, false, 987654321);
+        awayTeam.init(playerPrefab, this.transform, yellow, false, 987654321);
 
         SetFormations();
     }

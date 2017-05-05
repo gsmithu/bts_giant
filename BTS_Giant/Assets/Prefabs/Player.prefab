@@ -165,7 +165,7 @@ TextMesh:
   m_Font: {fileID: 12800000, guid: 23a920e7199ff1946b0336c961b514ff, type: 3}
   m_Color:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4278190080
 --- !u!114 &114625010315229840
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -177,7 +177,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e36b490a99d4ce347a2a8e4acde93efb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tea: 0
 --- !u!136 &136519139595013816
 CapsuleCollider:
   m_ObjectHideFlags: 1

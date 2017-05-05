@@ -67,7 +67,7 @@ public class Ball : MonoBehaviour {
             int randomYInt = rand.Next(36, 180);
             float randomY = (float)randomYInt / 100;
             float randomZ = (float)rand.Next(-pitchLimitZ, pitchLimitZ);
-            int randomSpeedInt = rand.Next(10, 80);
+            int randomSpeedInt = rand.Next(20, 80);
             float randomSpeed = (float)randomSpeedInt / 10;
 
             Vector3 newEndVector = new Vector3(randomX, randomY, randomZ);
