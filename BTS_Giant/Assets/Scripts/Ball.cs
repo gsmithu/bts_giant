@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour {
+public class Ball : MonoBehaviour {
 
     private Journey activeJourney;
     private Queue<Journey> journeys;
@@ -15,12 +14,14 @@ public class Player : MonoBehaviour {
 
     /* Use this for initialization
     */
-    void Start () {
-       
+    void Start()
+    {
+
     }
-	
-	// Update is called once per frame - moves the player along on his journeys
-	void Update () {
+
+    // Update is called once per frame - moves the ball along on its journeys
+    void Update()
+    {
         if (activeJourney == null || activeJourney.isComplete)
         {
             //active journey if finished, or we don't have one - start the next journey - if we have one
@@ -28,7 +29,7 @@ public class Player : MonoBehaviour {
             {
                 activeJourney = journeys.Dequeue();
                 activeJourney.Start();
-            }            
+            }
         }
 
         if (!activeJourney.isComplete)
@@ -37,42 +38,23 @@ public class Player : MonoBehaviour {
         }
     }
 
-    // Called when Player is clicked on - doubles it in size
-    void OnSelect()
-    {
-        transform.localScale = new Vector3(transform.localScale.x * 2, transform.localScale.y * 2, transform.localScale.z * 2);
-    }
-
-    // Sets the strip colour of the player
-    public void setStripColour(Color stripColour)
-    {
-        this.gameObject.GetComponent<Renderer>().material.color = stripColour;
-    }
-
-    // Sets the shirt number of the player
-    public void setShirtNumber(int shirtNumber)
-    {
-        var shirtNumberGameObject = this.gameObject.transform.GetChild(0).gameObject;
-        shirtNumberGameObject.GetComponent<TextMesh>().text = shirtNumber.ToString();  
-    }
-
-    //Moves the player along on his current journey
+    //Moves the ball along on his current journey
     void moveOnJourney()
     {
         transform.localPosition = activeJourney.nextPositionToMoveTo();
     }
 
-    //Sets the players initial place in the formation and generates random journeys (using random seed passed in)
-    public void setPlaceInFormationAndGenerateRandomJourneys(Vector3 initialPosInFormation, int randomSeed)
+    //Sets the in its initial place and generates random journeys (using random seed passed in)
+    public void setBallInPlaceAndGenerateRandomJourneys(Vector3 initialPosInFormation, int randomSeed)
     {
         rand = new System.Random(randomSeed);
-        this.journeys = GenerateRandomJourneys(initialPosInFormation);        
+        this.journeys = GenerateRandomJourneys(initialPosInFormation);
     }
 
     //generates random journeys for the player
     Queue<Journey> GenerateRandomJourneys(Vector3 startingPosition)
     {
-        Queue<Journey> playerJourneys = new Queue<Journey>();
+        Queue<Journey> ballJourneys = new Queue<Journey>();
         var numJourneys = 50;
         Vector3 lastEndVector = startingPosition;
 
@@ -82,13 +64,15 @@ public class Player : MonoBehaviour {
             int pitchLimitZ = pitchSizeZ / 2;
 
             float randomX = (float)rand.Next(-pitchLimitX, pitchLimitX);
+            int randomYInt = rand.Next(36, 180);
+            float randomY = (float)randomYInt / 100;
             float randomZ = (float)rand.Next(-pitchLimitZ, pitchLimitZ);
-            int randomSpeedInt = rand.Next(10, 40);
+            int randomSpeedInt = rand.Next(10, 80);
             float randomSpeed = (float)randomSpeedInt / 10;
 
-            Vector3 newEndVector = new Vector3(randomX, 1.3f, randomZ);
+            Vector3 newEndVector = new Vector3(randomX, randomY, randomZ);
 
-            playerJourneys.Enqueue(
+            ballJourneys.Enqueue(
                 new Journey(
                     lastEndVector,
                     newEndVector,
@@ -99,6 +83,6 @@ public class Player : MonoBehaviour {
             lastEndVector = newEndVector;
         }
 
-        return playerJourneys;
+        return ballJourneys;
     }
 }

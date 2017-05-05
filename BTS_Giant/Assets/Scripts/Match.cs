@@ -18,6 +18,7 @@ public class Match : MonoBehaviour {
 
     private Team homeTeam;
     private Team awayTeam;
+    private Transform ball;
 
     /* Initialise the match
     *  Set up the pitch, ball and teams and makes a call to set formations
@@ -29,7 +30,7 @@ public class Match : MonoBehaviour {
         Transform pitch = Instantiate(pitchPrefab);
         pitch.transform.SetParent(this.transform, false);
 
-        Transform ball = Instantiate(ballPrefab);
+        ball = Instantiate(ballPrefab);
         ball.transform.SetParent(this.transform, false); 
         
         homeTeam = ScriptableObject.CreateInstance("Team") as Team;
@@ -46,6 +47,7 @@ public class Match : MonoBehaviour {
 		
 	}
 
+    //Set the formations of the teams and the ball, which will then kick off the random movement
     void SetFormations()
     {
         //MatchParser matchParser = new MatchParser();
@@ -56,5 +58,8 @@ public class Match : MonoBehaviour {
 
         homeTeam.setFormation(2);
         awayTeam.setFormation(8);
+
+        var ballComponent = ball.GetComponent<Ball>();
+        ballComponent.setBallInPlaceAndGenerateRandomJourneys(new Vector3(0, 0.36f, 0), 57585301);
     }
 }
