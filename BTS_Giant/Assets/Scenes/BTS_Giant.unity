@@ -420,7 +420,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2075165149}
   m_LocalRotation: {x: 0, y: 0.7071068, z: -0, w: -0.7071068}
-  m_LocalPosition: {x: 0, y: -0.5, z: 2}
+  m_LocalPosition: {x: 0, y: -0.5, z: 2.1}
   m_LocalScale: {x: 0.012, y: 0.012, z: 0.012}
   m_Children: []
   m_Father: {fileID: 0}
@@ -444,3 +444,4 @@ MonoBehaviour:
     type: 2}
   matchScreenPrefab: {fileID: 4696657658615540, guid: a37762089f290eb43b44f9ae3a9e8e97,
     type: 2}
+  logoPrefab: {fileID: 4192167908657802, guid: 9f4a27c84f435e34abcd1bb55fb10530, type: 2}
