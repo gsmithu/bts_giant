@@ -43,6 +43,12 @@ public class Player : MonoBehaviour {
 
     }
 
+    // Sets the position of the player
+    public void setPosition(float posX, float posY, float posZ)
+    {
+        transform.localPosition = new Vector3(posX, posY, posZ);
+    }
+
     //void OnColourChangeRequested (string requestedColour)
     //{
     //    var colourToChangeTo = new Color();
