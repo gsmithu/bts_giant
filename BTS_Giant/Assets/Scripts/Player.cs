@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,11 @@ public class Player : MonoBehaviour {
 
     private Journey activeJourney;
     private Queue<Journey> journeys;
+    private System.Random rand;
+
+    //TEMP HACK - GET THIS FROM EITHER PITCH OBJECT OR BY PASSING PARAMS IN TO MATCH
+    int pitchSizeX = 60;
+    int pitchSizeZ = 90;
 
     /* Use this for initialization
     */
@@ -50,15 +56,49 @@ public class Player : MonoBehaviour {
         shirtNumberGameObject.GetComponent<TextMesh>().text = shirtNumber.ToString();  
     }
 
-    // Sets the journeys that the player will take
-    public void setJourneys(Queue<Journey> journeys)
-    {
-        this.journeys = journeys;
-    }
-
     //Moves the player along on his current journey
     void movePlayerOnJourney()
     {
         transform.localPosition = activeJourney.nextPositionToMoveTo();
+    }
+
+    //Sets the players initial place in the formation and generates random journeys (using random seed passed in)
+    public void setPlaceInFormationAndGenerateRandomJourneys(Vector3 initialPosInFormation, int randomSeed)
+    {
+        rand = new System.Random(randomSeed);
+        this.journeys = GenerateRandomJourneys(initialPosInFormation);        
+    }
+
+    //generates random journeys for the player
+    Queue<Journey> GenerateRandomJourneys(Vector3 startingPosition)
+    {
+        Queue<Journey> playerJourneys = new Queue<Journey>();
+        var numJourneys = 10;
+        Vector3 lastEndVector = startingPosition;
+
+        for (int i = 0; i < numJourneys; i++)
+        {
+            int pitchLimitX = pitchSizeX / 2;
+            int pitchLimitZ = pitchSizeZ / 2;
+
+            float randomX = (float)rand.Next(-pitchLimitX, pitchLimitX);
+            float randomZ = (float)rand.Next(-pitchLimitZ, pitchLimitZ);
+            int randomSpeedInt = rand.Next(10, 40);
+            float randomSpeed = (float)randomSpeedInt / 10;
+
+            Vector3 newEndVector = new Vector3(randomX, 1.3f, randomZ);
+
+            playerJourneys.Enqueue(
+                new Journey(
+                    lastEndVector,
+                    newEndVector,
+                    randomSpeed
+                )
+            );
+
+            lastEndVector = newEndVector;
+        }
+
+        return playerJourneys;
     }
 }

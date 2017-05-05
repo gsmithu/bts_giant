@@ -78,7 +78,7 @@ public class Team : ScriptableObject {
         }
     }
 
-    // Positions the players of the team into the formation passed in (which is actually now an array of journeys)
+    // Positions the players of the team into the formation passed in and then tells the player to generate random journeys for itself
     public void setFormation(int formationId)
     {
         var selectedFormation = new float[11, 2];
@@ -97,41 +97,8 @@ public class Team : ScriptableObject {
             var playerComponent = players[i].GetComponent<Player>();
 
             var initialPos = new Vector3(selectedFormation[i, 0] * pitchSizeX, 1.3f, selectedFormation[i, 1] * pitchSizeZ);
-            var playerJourneys = GenerateRandomJourneysForPlayer(initialPos);
-
-            playerComponent.setJourneys(playerJourneys);
+            playerComponent.setPlaceInFormationAndGenerateRandomJourneys(initialPos, rand.Next());
         }
     }
 
-    Queue<Journey> GenerateRandomJourneysForPlayer(Vector3 startingPosition)
-    {
-        Queue<Journey> playerJourneys = new Queue<Journey>();
-        var numJourneys = 10;
-        Vector3 lastEndVector = startingPosition;
-
-        for (int i = 0; i < numJourneys; i++)
-        {
-            int pitchLimitX = pitchSizeX / 2;
-            int pitchLimitZ = pitchSizeZ / 2;
-
-            float randomX = (float) rand.Next(-pitchLimitX, pitchLimitX);
-            float randomZ = (float) rand.Next(-pitchLimitZ, pitchLimitZ);
-            int randomSpeedInt = rand.Next(10, 40);
-            float randomSpeed = (float)randomSpeedInt / 10;
-
-            Vector3 newEndVector = new Vector3(randomX, 1.3f, randomZ);
-              
-            playerJourneys.Enqueue(
-                new Journey(
-                    lastEndVector,
-                    newEndVector,
-                    randomSpeed
-                )
-            );
-
-            lastEndVector = newEndVector;
-        }
-
-        return playerJourneys;
-    }
 }
