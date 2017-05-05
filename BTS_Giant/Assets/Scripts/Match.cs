@@ -7,6 +7,7 @@ public class Match : MonoBehaviour {
     public Transform pitchPrefab;
     public Transform ballPrefab;
     public Transform playerPrefab;
+    public Transform matchScreenPrefab;
 
     private Color red = new Color(255, 0, 0, 1);
     private Color green = new Color(0, 255, 0, 1);
@@ -22,8 +23,11 @@ public class Match : MonoBehaviour {
     *  Set up the pitch, ball and teams and makes a call to set formations
     */
     void Start () {
+        Transform matchScreen = Instantiate(matchScreenPrefab);
+        matchScreen.transform.SetParent(this.transform, false); //this makes the object keep its local orientation/scale rather than the global
+
         Transform pitch = Instantiate(pitchPrefab);
-        pitch.transform.SetParent(this.transform, false); //this makes the object keep its local orientation/scale rather than the global
+        pitch.transform.SetParent(this.transform, false);
 
         Transform ball = Instantiate(ballPrefab);
         ball.transform.SetParent(this.transform, false); 
