@@ -13,7 +13,7 @@ public class Team : MonoBehaviour {
     private Transform playerPrefab;
     private bool atHome;
 
-    float[,] formationTwo = new float[11, 2] { //these are percentages of where the player is on the pitch e.g. 50 across, 0 up
+    float[,] formationTwo = new float[11, 2] { //these are percentages of where the player is on the pitch e.g. 0 across, 50 up
          {0,0.5f},
          {0.125f,0.125f},
          {0.375f,0.125f},
@@ -49,7 +49,7 @@ public class Team : MonoBehaviour {
         this.atHome = atHome;
     }
 
-    // Initialise the team
+    // Initialise the player positions
     void Start () {
 
     }
@@ -64,7 +64,7 @@ public class Team : MonoBehaviour {
     {
         players = new List<Transform>();
 
-        for (int i = 1; i <= 11; i++)
+        for (int i = 1; i <= 1; i++)
         {
             var playerPosX = atHome ? i : -i;
             var playerPosZ = atHome ? i : -i;
@@ -102,7 +102,28 @@ public class Team : MonoBehaviour {
         for (int i = 0; i < players.ToArray().Length; i++)
         {
             var playerComponent = players[i].GetComponent<Player>();
-            playerComponent.setPosition(selectedFormation[i, 0] * pitchSizeX, 1.3f, selectedFormation[i, 1] * pitchSizeZ);
+            //playerComponent.setPosition(selectedFormation[i, 0] * pitchSizeX, 1.3f, selectedFormation[i, 1] * pitchSizeZ
+
+            Queue<Journey> playersJourneys = new Queue<Journey>();
+
+            playersJourneys.Enqueue(
+                new Journey(
+                    new Vector3(0 * pitchSizeX, 1.3f, 0.5f * pitchSizeZ),
+                    new Vector3(0 * pitchSizeX, 1.3f, 0f * pitchSizeZ),
+                    2.5f
+                    )
+                );
+
+            playersJourneys.Enqueue(
+              new Journey(
+                  new Vector3(0 * pitchSizeX, 1.3f, 0f * pitchSizeZ),
+                  new Vector3(0.4f * pitchSizeX, 1.3f, -0.2f * pitchSizeZ),
+                  4f
+                  )
+              );
+
+
+            playerComponent.setJourneys(playersJourneys);
         }
 
     }

@@ -4,24 +4,32 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
-    //private Color red = new Color(255, 0, 0, 1);
-    //private Color green = new Color(0, 255, 0, 1);
-    //private Color blue = new Color(0, 0, 255, 1);
-    //private Color yellow = new Color(255, 255, 0, 1);
-    //private Color orange = new Color(255, 90, 0, 1);
-    //private Color pink = new Color(255, 105, 150, 1);
+    private Journey activeJourney;
+    private Queue<Journey> journeys;
 
     /* Use this for initialization
-    *  Sets the initial position of the player, based on their position
     */
     void Start () {
-		
-	}
+       
+    }
 	
-	// Update is called once per frame
+	// Update is called once per frame - moves the player along on his journeys
 	void Update () {
-		
-	}
+        if (activeJourney == null || activeJourney.isComplete)
+        {
+            //active journey if finished, or we don't have one - start the next journey - if we have one
+            if (journeys.Count > 0)
+            {
+                activeJourney = journeys.Dequeue();
+                activeJourney.Start();
+            }            
+        }
+
+        if (!activeJourney.isComplete)
+        {
+            this.movePlayerOnJourney();
+        }
+    }
 
     // Called when Player is clicked on - doubles it in size
     void OnSelect()
@@ -40,42 +48,17 @@ public class Player : MonoBehaviour {
     {
         var shirtNumberGameObject = this.gameObject.transform.GetChild(0).gameObject;
         shirtNumberGameObject.GetComponent<TextMesh>().text = shirtNumber.ToString();  
-
     }
 
-    // Sets the position of the player
-    public void setPosition(float posX, float posY, float posZ)
+    // Sets the journeys that the player will take
+    public void setJourneys(Queue<Journey> journeys)
     {
-        transform.localPosition = new Vector3(posX, posY, posZ);
+        this.journeys = journeys;
     }
 
-    //void OnColourChangeRequested (string requestedColour)
-    //{
-    //    var colourToChangeTo = new Color();
-
-    //    switch (requestedColour)
-    //    {
-    //        case "red":
-    //            colourToChangeTo = red;
-    //            break;
-    //        case "green":
-    //            colourToChangeTo = green;
-    //            break;
-    //        case "blue":
-    //            colourToChangeTo = blue;
-    //            break;
-    //        case "yellow":
-    //            colourToChangeTo = yellow;
-    //            break;
-    //        case "orange":
-    //            colourToChangeTo = orange;
-    //            break;
-    //        case "pink":
-    //            colourToChangeTo = pink;
-    //            break;
-    //    }
-
-    //    this.gameObject.GetComponent<Renderer>().material.color = colourToChangeTo;
-    //}
-
+    //Moves the player along on his current journey
+    void movePlayerOnJourney()
+    {
+        transform.localPosition = activeJourney.nextPositionToMoveTo();
+    }
 }
