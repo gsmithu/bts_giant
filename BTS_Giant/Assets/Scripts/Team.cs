@@ -119,16 +119,14 @@ public class Team : MonoBehaviour {
         {
             System.Random rand = new System.Random();
 
-            int randomX = rand.Next(-50, 50);
-            float randomPercentageX = randomX / 100;
-            float randomNewPosX = randomPercentageX * pitchSizeX;
+            int pitchLimitX = pitchSizeX / 2;
+            int pitchLimitZ = pitchSizeZ / 2;
 
-            int randomZ = rand.Next(-50, 50);
-            float randomPercentageZ = randomZ / 100;
-            float randomNewPosZ = randomPercentageZ * pitchSizeZ;
+            float randomX = (float) rand.Next(-pitchLimitX, pitchLimitX);
+            float randomZ = (float) rand.Next(-pitchLimitZ, pitchLimitZ);
 
-            Vector3 newEndVector = new Vector3(randomNewPosX, 1.3f, randomNewPosZ);
-
+            Vector3 newEndVector = new Vector3(randomX, 1.3f, randomZ);
+              
             playerJourneys.Enqueue(
                 new Journey(
                     lastEndVector,
