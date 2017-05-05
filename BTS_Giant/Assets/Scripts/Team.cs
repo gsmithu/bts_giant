@@ -13,6 +13,10 @@ public class Team : MonoBehaviour {
     private Transform playerPrefab;
     private bool atHome;
 
+    //TEMP HACK - GET THIS FROM EITHER PITCH OBJECT OR BY PASSING PARAMS IN TO MATCH
+    int pitchSizeX = 60;
+    int pitchSizeZ = 90;
+
     float[,] formationTwo = new float[11, 2] { //these are percentages of where the player is on the pitch e.g. 0 across, 50 up
          {0,0.5f},
          {0.125f,0.125f},
@@ -80,14 +84,9 @@ public class Team : MonoBehaviour {
         }
     }
 
-    // Positions the players of the team into the formation passed in
+    // Positions the players of the team into the formation passed in (which is actually now an array of journeys)
     public void setFormation(int formationId)
     {
-
-        //TEMP HACK - GET THIS FROM EITHER PITCH OBJECT OR BY PASSING PARAMS IN TO MATCH
-        var pitchSizeX = 60;
-        var pitchSizeZ = 90;
-
         var selectedFormation = new float[11, 2];
         switch (formationId)
         {
@@ -102,29 +101,45 @@ public class Team : MonoBehaviour {
         for (int i = 0; i < players.ToArray().Length; i++)
         {
             var playerComponent = players[i].GetComponent<Player>();
-            //playerComponent.setPosition(selectedFormation[i, 0] * pitchSizeX, 1.3f, selectedFormation[i, 1] * pitchSizeZ
 
-            Queue<Journey> playersJourneys = new Queue<Journey>();
+            var initialPos = new Vector3(selectedFormation[i, 0] * pitchSizeX, 1.3f, selectedFormation[i, 1] * pitchSizeZ);
+            var playerJourneys = GenerateRandomJourneysForPlayer(initialPos);
 
-            playersJourneys.Enqueue(
+            playerComponent.setJourneys(playerJourneys);
+        }
+    }
+
+    Queue<Journey> GenerateRandomJourneysForPlayer(Vector3 startingPosition)
+    {
+        Queue<Journey> playerJourneys = new Queue<Journey>();
+        var numJourneys = 10;
+        Vector3 lastEndVector = startingPosition;
+
+        for (int i = 0; i < numJourneys; i++)
+        {
+            System.Random rand = new System.Random();
+
+            int randomX = rand.Next(-50, 50);
+            float randomPercentageX = randomX / 100;
+            float randomNewPosX = randomPercentageX * pitchSizeX;
+
+            int randomZ = rand.Next(-50, 50);
+            float randomPercentageZ = randomZ / 100;
+            float randomNewPosZ = randomPercentageZ * pitchSizeZ;
+
+            Vector3 newEndVector = new Vector3(randomNewPosX, 1.3f, randomNewPosZ);
+
+            playerJourneys.Enqueue(
                 new Journey(
-                    new Vector3(0 * pitchSizeX, 1.3f, 0.5f * pitchSizeZ),
-                    new Vector3(0 * pitchSizeX, 1.3f, 0f * pitchSizeZ),
-                    2.5f
-                    )
-                );
+                    lastEndVector,
+                    newEndVector,
+                    2f
+                )
+            );
 
-            playersJourneys.Enqueue(
-              new Journey(
-                  new Vector3(0 * pitchSizeX, 1.3f, 0f * pitchSizeZ),
-                  new Vector3(0.4f * pitchSizeX, 1.3f, -0.2f * pitchSizeZ),
-                  4f
-                  )
-              );
-
-
-            playerComponent.setJourneys(playersJourneys);
+            lastEndVector = newEndVector;
         }
 
+        return playerJourneys;
     }
 }
